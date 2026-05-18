@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{title}} | MiInventarioExpress</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/" class="nav-brand">📦 InventarioExpress</a>
+    
+    <div class="nav-links">
+      {{#if user}}
+        <a href="/productos">Productos</a>
+        <a href="/chat">Chat en vivo</a>
+        <span class="user-badge">Hi, {{user.username}}</span>
+        <a href="/logout" class="btn-logout">Cerrar sesión</a>
+      {{else}}
+        <a href="/login">Iniciar sesión</a>
+        <a href="/register">Registrarse</a>
+      {{/if}}
+    </div>
+  </nav>
+  
+  <main class="container">
+    {{{body}}}
+  </main>
+
+  {{#if useClientJS}}
+    <script src="/cliente.js"></script>
+  {{/if}}
+</body>
+</html>

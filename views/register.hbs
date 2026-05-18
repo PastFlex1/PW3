@@ -1,0 +1,50 @@
+{{#if success}}
+  <div class="auth-card" style="text-align: center; padding: 4rem 2rem;">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+    <h2 style="color: var(--success); font-size: 2rem;">¡Registro Exitoso!</h2>
+    <p style="color: var(--text-light); font-size: 1.1rem; margin-bottom: 2rem;">
+      Bienvenido/a <strong>{{username}}</strong>. Tu cuenta ha sido creada correctamente.
+    </p>
+    <div class="spinner" style="margin: 0 auto 1.5rem; width: 40px; height: 40px; border: 4px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    <p style="color: var(--text-light); font-size: 0.9rem;">Redirigiendo a tu inventario...</p>
+    
+    <script>
+      setTimeout(() => {
+        window.location.href = "/productos";
+      }, 2500);
+    </script>
+    <style>
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+  </div>
+{{else}}
+  <div class="auth-card">
+    <h2>Crea tu cuenta</h2>
+    <p style="text-align: center; color: var(--text-light); margin-bottom: 2rem;">Únete a MiInventarioExpress hoy mismo</p>
+
+    {{#if errors}}
+      <div class="alert error">
+        {{#each errors}}
+          <p>{{this.msg}}</p>
+        {{/each}}
+      </div>
+    {{/if}}
+
+    <form method="POST" action="/register">
+      <div class="form-group">
+        <input type="text" name="username" placeholder="Nombre de usuario" value="{{old.username}}" required>
+      </div>
+      <div class="form-group">
+        <input type="email" name="email" placeholder="Correo electrónico" value="{{old.email}}" required>
+      </div>
+      <div class="form-group">
+        <input type="password" name="password" placeholder="Contraseña segura" required>
+      </div>
+      <button type="submit">Crear mi cuenta</button>
+    </form>
+    
+    <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;">
+      ¿Ya tienes cuenta? <a href="/login" style="color: var(--primary); font-weight: 600;">Inicia sesión aquí</a>
+    </p>
+  </div>
+{{/if}}

@@ -1,0 +1,52 @@
+<div class="header-section">
+  <h1>📦 Gestión de Productos</h1>
+  <p style="text-align: center; color: var(--text-light);">Administra tu inventario y categorías en tiempo real</p>
+</div>
+
+<div class="form-producto">
+  <h2 id="formTitle">Añadir Nuevo Producto</h2>
+  <form id="formProducto" enctype="multipart/form-data">
+    <input type="hidden" id="editProductId">
+    <div class="form-group">
+      <input type="text" id="nombre" placeholder="Nombre del producto" required style="width: 100%;">
+    </div>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+      <div>
+        <select id="categoryId" required>
+          <option value="">Selecciona una categoría...</option>
+        </select>
+      </div>
+      <div>
+        <input type="number" id="stock" placeholder="Stock (cantidad)" min="0" required style="width: 100%;">
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+      <div>
+        <input type="number" id="precio" placeholder="Precio ($)" step="0.01" min="0" required style="width: 100%;">
+      </div>
+      <div>
+        <input type="file" id="imagen" accept="image/*" style="padding: 0.5rem; width: 100%;">
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <textarea id="descripcion" placeholder="Descripción breve del producto" rows="3" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 10px;"></textarea>
+    </div>
+    
+    <div style="display: flex; gap: 1rem;">
+      <button type="submit" id="submitBtn" style="flex: 1;">🚀 Guardar Producto</button>
+      <button type="button" id="cancelEditBtn" style="display: none; background: #64748b;" onclick="cancelarEdicion()">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<hr style="border: 0; border-top: 1px solid var(--border); margin: 3rem 0;">
+
+<div id="lista" class="lista-productos">
+  <!-- Las tarjetas de productos se cargarán dinámicamente -->
+  <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+    <p>Cargando inventario...</p>
+  </div>
+</div>
