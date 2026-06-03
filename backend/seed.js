@@ -3,9 +3,15 @@ import dotenv from "dotenv";
 import Category from "./models/Category.js";
 import Product from "./models/Product.js";
 
-dotenv.config();
+import path from "path";
+import { fileURLToPath } from "url";
 
-const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/proyecto_final_db_v2";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, '../.env') });
+
+const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/proyecto_final_db_v2";
 
 async function seedDatabase() {
   try {
@@ -99,7 +105,7 @@ async function seedDatabase() {
         name: "Lámpara Minimalista de Escritorio",
         price: 45.00,
         description: "Lámpara LED con control táctil de intensidad y temperatura de color ajustable para cuidar la vista.",
-        imageUrl: "https://images.unsplash.com/photo-1507473885765-e6ed057f7821?w=600&auto=format&fit=crop&q=80",
+        imageUrl: "https://picsum.photos/seed/lampara/600/400",
         categoryId: catMap["Hogar y Decoración"],
         stock: 50
       },
@@ -107,7 +113,7 @@ async function seedDatabase() {
         name: "Silla Ergonómica Executive",
         price: 249.99,
         description: "Silla de oficina con soporte lumbar ajustable, malla transpirable y reposacabezas reclinable 3D.",
-        imageUrl: "https://images.unsplash.com/photo-1580481077494-e3299ac52ee6?w=600&auto=format&fit=crop&q=80",
+        imageUrl: "https://picsum.photos/seed/silla/600/400",
         categoryId: catMap["Hogar y Decoración"],
         stock: 15
       },

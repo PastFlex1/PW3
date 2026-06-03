@@ -7,6 +7,7 @@ import { Server } from "socket.io";
 import path from "path";
 import { fileURLToPath } from "url";
 import { engine } from "express-handlebars";
+import cors from "cors";
 
 import productRoutes from "./routes/productRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
@@ -15,13 +16,18 @@ import chatRoutes from "./routes/chatRoutes.js";
 import Mensaje from "./models/Mensaje.js";
 import multer from "multer";
 
-dotenv.config();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, '../.env') });
 const app = express();
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    credentials: true
+  }
+});
 
 // ========== CONFIGURACIÓN HANDLEBARS ==========
 app.engine("hbs", engine({ extname: ".hbs", defaultLayout: "main" }));
@@ -30,6 +36,10 @@ app.set("views", path.join(__dirname, "views"));
 // =============================================
 
 // Middlewares
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
@@ -60,6 +70,10 @@ app.get("/", (req, res) => {
   } else {
     res.redirect("/login");
   }
+});
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok", timestamp: new Date() });
 });
 
 app.use("/", authRoutes);
@@ -152,7 +166,7 @@ app.use((err, req, res, next) => {
 
 // Conexión a MongoDB y arranque
 const PORT = process.env.PORT || 3000;
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("Conectado a MongoDB");
     server.listen(PORT, () => {

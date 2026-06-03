@@ -1,4 +1,11 @@
+# General
 node_modules/
 .env
-uploads/
 *.log
+.DS_Store
+
+# Backend
+backend/uploads/
+
+# Frontend
+frontend/dist/

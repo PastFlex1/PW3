@@ -46,46 +46,42 @@ Ubicado en la raíz del proyecto, ofrece servicios de datos altamente seguros:
 
 Para ejecutar esta aplicación en tu entorno local, requieres tener **Node.js** y un servidor de **MongoDB** (por defecto en `mongodb://localhost:27017`) en ejecución.
 
-### Paso 1: Configurar e Inicializar el Backend Express
-1. Abre una terminal en el directorio raíz del proyecto.
-2. Instala las dependencias del servidor:
+1. Abre una terminal en el directorio raíz del proyecto (donde está el `package.json` principal).
+2. Instala todas las dependencias (raíz, backend y frontend) con un solo comando:
    ```bash
-   npm install
+   npm run install:all
    ```
-3. Verifica que el archivo `.env` en la raíz contiene:
-   ```env
-   PORT=3000
-   MONGO_URI=mongodb://localhost:27017/proyecto_final_db_v2
-   SESSION_SECRET=tu_secreto_super_seguro
+3. Verifica que existe un archivo `.env` en la raíz (puedes copiar el de ejemplo):
+   ```bash
+   cp .env.example .env
    ```
 4. **Poblar la Base de Datos con Datos Iniciales (Semilla)**:
-   Ejecuta el script de seeding para cargar las categorías y los 12 productos iniciales:
+   Si es la primera vez, entra a la carpeta del backend y puebla la base de datos:
    ```bash
+   cd backend
    npm run seed
+   cd ..
    ```
-   *Verás un mensaje en consola confirmando la creación exitosa en MongoDB.*
-5. **Iniciar el Servidor Backend**:
-   Ejecuta el servidor en modo desarrollo (con recarga automática):
+5. **Iniciar los Servidores en Desarrollo**:
+   Ejecuta el servidor backend y el frontend de Vite simultáneamente desde la raíz:
    ```bash
    npm run dev
    ```
-   *El backend estará escuchando en `http://localhost:3000`.*
+   *El backend estará escuchando en `http://localhost:3000` y el cliente Vue en `http://localhost:5173`.*
 
-### Paso 2: Configurar e Iniciar la SPA Frontend en Vue 3
-1. Abre **una segunda terminal** y navega a la subcarpeta `frontend`:
+---
+
+## 🚀 Construcción y Despliegue (Producción)
+
+Si deseas preparar la aplicación para producción:
+
+1. Ejecuta el build del frontend desde la raíz:
    ```bash
-   cd frontend
+   npm run build
    ```
-2. Instala las dependencias del cliente:
-   ```bash
-   npm install
-   ```
-3. **Iniciar el Servidor de Vite**:
-   Ejecuta el entorno de desarrollo de Vite:
-   ```bash
-   npm run dev
-   ```
-   *El cliente Vue estará corriendo en `http://localhost:5173`.*
+   Esto generará una carpeta `frontend/dist/` optimizada y minificada.
+2. Configura tu servidor Node.js de producción (ej: PM2, Render, Railway) para correr `backend/app.js`, asegurándote de inyectar las variables de entorno de producción.
+3. *Nota*: Si deseas servir el frontend desde el mismo Node.js, deberás agregar la configuración en `app.js` para usar `express.static('../frontend/dist')`. En arquitecturas modernas, es preferible servir la SPA desde un CDN estático o Nginx.
 
 ---
 
@@ -107,19 +103,23 @@ Para ejecutar esta aplicación en tu entorno local, requieres tener **Node.js** 
 
 ---
 
-## 📁 Estructura Completa de Directorios y Archivos
+## 📁 Estructura Completa de Directorios y Archivos (Monorepo)
 
 ```text
-/ (Raíz del Proyecto - Backend)
-├── .env                       # Variables de configuración del entorno
+/ (Raíz del Proyecto)
+├── package.json               # Orquestación del monorepo (scripts concurrentes)
+├── .env.example               # Ejemplo de variables de entorno
+├── .gitignore                 # Archivos excluidos de git globales
+
+/backend (Servidor RESTful Express)
 ├── app.js                     # Configuración principal de Express y middlewares
-├── package.json               # Dependencias del backend y scripts (seed, dev)
-├── seed.js                    # Script generador de productos y categorías iniciales
-├── create_user.js             # Script auxiliar para generar usuarios administradores
-├── /controllers               # Controladores REST (productController, categoryController, authController)
-├── /models                    # Modelos Mongoose (Product, Category, User con virtuals)
-├── /routes                    # Definición de rutas (productRoutes, categoryRoutes, authRoutes)
-└── /uploads                   # Almacenamiento local de archivos e imágenes
+├── package.json               # Dependencias exclusivas del backend
+├── seed.js                    # Script generador de datos
+├── create_user.js             # Script generador de usuarios
+├── /controllers               # Controladores REST
+├── /models                    # Modelos Mongoose
+├── /routes                    # Definición de rutas
+└── /uploads                   # Archivos e imágenes cargados por usuarios
     
 /frontend (Subproyecto SPA Vue 3)
 ├── index.html                 # Punto de entrada HTML de la SPA
