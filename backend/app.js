@@ -53,8 +53,8 @@ const sessionMiddleware = session({
   saveUninitialized: false,
   cookie: { 
     maxAge: 1000 * 60 * 60, // 1 hora
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    secure: process.env.NODE_ENV === 'production'
+    sameSite: 'none', // Forzamos none para Netlify -> Railway
+    secure: true      // Forzamos secure para HTTPS
   }
 });
 
