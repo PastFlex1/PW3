@@ -26,8 +26,11 @@ export function useApi(initialData = null) {
       signal: abortController.signal
     }
 
+    const baseUrl = import.meta.env.VITE_API_URL || ''
+    const fullUrl = url.startsWith('http') ? url : `${baseUrl}${url}`
+
     try {
-      const response = await fetch(url, fetchOptions)
+      const response = await fetch(fullUrl, fetchOptions)
       
       if (response.status === 401) {
         error.value = '🔒 Acceso no autorizado (401). Inicia sesión para acceder a este recurso.'
@@ -47,13 +50,13 @@ export function useApi(initialData = null) {
       return result
     } catch (err) {
       if (err.name === 'AbortError') {
-        console.log(`Petición cancelada: ${url}`)
+        console.log(`Petición cancelada: ${fullUrl}`)
         return null
       }
       
       // Reintento simple si falla la conexión
       if (retries > 0) {
-        console.warn(`Petición fallida. Reintentando conexión a ${url}... (${retries} reintento restante)`)
+        console.warn(`Petición fallida. Reintentando conexión a ${fullUrl}... (${retries} reintento restante)`)
         return await execute(url, options, retries - 1)
       }
 

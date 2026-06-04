@@ -14,9 +14,11 @@ const loginPassword = ref('admin123')
 const loginLoading = ref(false)
 const loginError = ref(null)
 
+const API_URL = import.meta.env.VITE_API_URL || ''
+
 const checkSession = async () => {
   try {
-    const res = await fetch('/api/auth/session', { credentials: 'include' })
+    const res = await fetch(`${API_URL}/api/auth/session`, { credentials: 'include' })
     if (res.ok) {
       const data = await res.json()
       currentUser.value = data.user
@@ -31,7 +33,7 @@ const handleLogin = async () => {
   loginLoading.value = true
   loginError.value = null
   try {
-    const res = await fetch('/api/auth/login', {
+    const res = await fetch(`${API_URL}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: loginEmail.value, password: loginPassword.value }),
@@ -56,7 +58,7 @@ const handleLogin = async () => {
 
 const handleLogout = async () => {
   try {
-    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' })
+    await fetch(`${API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' })
     currentUser.value = null
     needAuth.value = true
     if (route.path === '/') {
