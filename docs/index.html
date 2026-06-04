@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentación - MiInventarioExpress</title>
+  <!-- Usando Pico.css para un diseño moderno y limpio sin escribir mucho CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+    :root {
+      --primary: #4f46e5;
+    }
+    header {
+      padding: 3rem 0;
+      text-align: center;
+      background: var(--primary);
+      color: white;
+      margin-bottom: 3rem;
+    }
+    header h1 {
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+    .badge-netlify { background: #00ad9f; color: white; padding: 0.2rem 0.5rem; border-radius: 4px; text-decoration: none; font-size: 0.8rem; font-weight: bold;}
+    .badge-railway { background: #0b0d0e; color: white; padding: 0.2rem 0.5rem; border-radius: 4px; text-decoration: none; font-size: 0.8rem; font-weight: bold;}
+    .method-get { color: #10b981; font-weight: bold; }
+    .method-post { color: #3b82f6; font-weight: bold; }
+    .method-put { color: #f59e0b; font-weight: bold; }
+    .method-delete { color: #ef4444; font-weight: bold; }
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      margin-top: 3rem;
+      border-top: 1px solid var(--muted-border-color);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <h1>MiInventarioExpress</h1>
+      <p>Micrositio de Documentación y Arquitectura</p>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <!-- Enlaces de Despliegue -->
+    <section id="enlaces">
+      <h2>🚀 Enlaces de Despliegue</h2>
+      <article>
+        <ul>
+          <li>
+            <strong>Frontend (SPA):</strong> 
+            <a href="https://pw4.netlify.app" target="_blank">https://pw4.netlify.app</a> 
+            <span class="badge-netlify">Netlify</span>
+          </li>
+          <li>
+            <strong>Backend (API REST):</strong> 
+            <a href="https://pw3-production.up.railway.app" target="_blank">https://pw3-production.up.railway.app</a> 
+            <span class="badge-railway">Railway</span>
+          </li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- Arquitectura de Despliegue -->
+    <section id="arquitectura">
+      <h2>🏗️ Arquitectura de Despliegue</h2>
+      <p>La aplicación sigue una arquitectura moderna dividida en tres capas principales (Frontend, Backend y Base de Datos) separadas y desplegadas de forma independiente:</p>
+      
+      <div class="grid">
+        <article>
+          <h3>1. Frontend (Cliente)</h3>
+          <p>Construido con <strong>Vue 3</strong> y empaquetado con <strong>Vite</strong>. Se despliega como una Single Page Application (SPA) estática en <strong>Netlify</strong>. Netlify sirve los archivos estáticos HTML/CSS/JS compilados (`dist/`) de forma global mediante CDN y delega el enrutamiento al cliente mediante la regla `_redirects`.</p>
+        </article>
+        <article>
+          <h3>2. Backend (Servidor)</h3>
+          <p>Desarrollado en <strong>Node.js</strong> usando <strong>Express</strong>. Expone una API REST y WebSockets (Socket.io). Está alojado en <strong>Railway</strong>. Se configuraron políticas estrictas de CORS y cookies (`SameSite: none`, `Secure`) para asegurar la comunicación cross-site (Netlify ↔ Railway).</p>
+        </article>
+        <article>
+          <h3>3. Base de Datos</h3>
+          <p>Almacenamiento NoSQL gestionado en la nube usando <strong>MongoDB Atlas</strong>. El servidor de Railway se conecta a este clúster mediante una cadena de conexión URI segura inyectada como variable de entorno.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Documentación de Endpoints -->
+    <section id="endpoints">
+      <h2>🔌 Documentación de Endpoints (API)</h2>
+      <p>A continuación se listan los principales endpoints disponibles en el backend:</p>
+      <figure>
+        <table role="grid">
+          <thead>
+            <tr>
+              <th>Método</th>
+              <th>Endpoint</th>
+              <th>Descripción</th>
+              <th>Autenticación</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Autenticación -->
+            <tr>
+              <td><span class="method-post">POST</span></td>
+              <td><code>/api/auth/login</code></td>
+              <td>Inicia sesión en la plataforma y establece la cookie segura de sesión.</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td><span class="method-get">GET</span></td>
+              <td><code>/api/auth/session</code></td>
+              <td>Verifica si existe una sesión activa y devuelve los datos del usuario.</td>
+              <td>Requerida</td>
+            </tr>
+            <tr>
+              <td><span class="method-post">POST</span></td>
+              <td><code>/api/auth/logout</code></td>
+              <td>Destruye la sesión en el servidor y limpia la cookie de sesión.</td>
+              <td>Requerida</td>
+            </tr>
+            
+            <!-- Productos -->
+            <tr>
+              <td><span class="method-get">GET</span></td>
+              <td><code>/api/products</code></td>
+              <td>Obtiene el catálogo completo de productos disponibles.</td>
+              <td>Requerida</td>
+            </tr>
+            <tr>
+              <td><span class="method-post">POST</span></td>
+              <td><code>/api/products</code></td>
+              <td>Crea un nuevo producto en el catálogo (soporta subida de imágenes con Multer).</td>
+              <td>Requerida</td>
+            </tr>
+            <tr>
+              <td><span class="method-get">GET</span></td>
+              <td><code>/api/products/:id</code></td>
+              <td>Obtiene la información detallada de un producto específico.</td>
+              <td>Requerida</td>
+            </tr>
+            <tr>
+              <td><span class="method-put">PUT</span></td>
+              <td><code>/api/products/:id</code></td>
+              <td>Actualiza los datos o imagen de un producto existente.</td>
+              <td>Requerida</td>
+            </tr>
+            <tr>
+              <td><span class="method-delete">DELETE</span></td>
+              <td><code>/api/products/:id</code></td>
+              <td>Elimina un producto de la base de datos de forma permanente.</td>
+              <td>Requerida</td>
+            </tr>
+
+            <!-- Categorías -->
+            <tr>
+              <td><span class="method-get">GET</span></td>
+              <td><code>/api/categories</code></td>
+              <td>Devuelve el listado de categorías para filtrado y creación de productos.</td>
+              <td>Requerida</td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <small>Desarrollo de Aplicaciones Web - PW3</small>
+    </div>
+  </footer>
+
+</body>
+</html>
