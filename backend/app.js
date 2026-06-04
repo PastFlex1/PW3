@@ -46,11 +46,16 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Configuración de Sesiones (compartida con Socket.io)
+app.set("trust proxy", 1); // Necesario para secure cookies en Railway/Heroku
 const sessionMiddleware = session({
   secret: process.env.SESSION_SECRET || "secreto_default",
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 1000 * 60 * 60 } // 1 hora
+  cookie: { 
+    maxAge: 1000 * 60 * 60, // 1 hora
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    secure: process.env.NODE_ENV === 'production'
+  }
 });
 
 app.use(sessionMiddleware);
